@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+	html,
+	body {
+		font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
+		font-size: 14px;
+		border: none;
+		padding: 0px;
+		margin: 0px;
+		margin-top: 16px;
+		width: 100%;
+		height: 100%;
+		overflow: scroll;
+		-webkit-overflow-scrolling: touch;
+		max-width: 100%;
+		overflow-x: hidden;
+
+	}
+
+	svg,
+	canvas {
+		position: absolute;
+		left: 0px;
+		top: 0px;
+	}
+
+	svg.plot {
+		background-color: rgba(255, 255, 255, 0.0);
+	}
+
+	svg .tick {
+		font-size: 13px;
+	}
+
+
+	#topPanel {
+		position: fixed;
+		top: 0px;
+		right: 0px;
+		width: 400px;
+		bottom: 0px;
+		background: #F7F7F7;
+		padding: 3px;
+		z-index: 3;
+		padding: 4px;
+	}
+
+	label {
+		font-size: 12px;
+		margin-left: 0px;
+		margin-right: 0px;
+		color: #797979;
+		margin-bottom: 4px;
+		margin-top: 4px;
+	}
+
+	select {
+		font-size: 10px;
+		margin-bottom: 4px;
+		margin-top: 4px;
+		height: 15px;
+		border: 1px solid #999999;
+		background: #FAFAFA;
+	}
+
+	textarea,
+	input[type="text"] {
+		-webkit-appearance: caret;
+		-moz-appearance: caret;
+		/* mobile firefox too! */
+	}
+
+.bar rect {
+  fill: steelblue;
+}
+
+.bar text {
+	font-size: 2px;
+  fill: #fff;
+  font: 10px sans-serif;
+}
+
+	input {
+		font-size: 12px;
+		margin-bottom: 4px;
+		margin-top: 4px;
+		height: 11px;
+		padding: 1px;
+		border: 1px solid #999999;
+		background: white;
+	}
+
+	input[type="checkbox"] {
+		margin-left: 2px;
+		margin-right: 0px;
+	}
+
+	button {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+		font-size: 14px;
+		display: inline-block;
+		background: rgba(255, 255, 255, 0.5);
+		color: black;
+		padding: 3px;
+		padding-left: 5px;
+		padding-right: 5px;
+		border-radius: 2px;
+		-webkit-box-shadow: 1px 1px 1px 0 #dddddd;
+		box-shadow: 1px 1px 1px 0 #dddddd;
+		border: 0.5pt solid rgb(220, 220, 220);
+		margin: 2px;
+		display: inline-block;
+	}
+
+	button:hover {
+		cursor: pointer;
+	}
+
+	button:active {
+		background: rgba(255, 255, 255, 0.8);
+		border-radius: 5px;
+		-webkit-box-shadow: inset 1px 1px 1px 0 #dddddd;
+		box-shadow: inset 1px 1px 1px 0 #dddddd;
+	}
+
+	hr {
+		display: block;
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+		margin-left: auto;
+		margin-right: auto;
+		border: 1px inset #F7F7F7;
+	}
+
+	#plotPanel {
+		position: relative;
+		display: block;
+		background: white;
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+		height: 300px;
+		border: 1px solid #F1F1F1;
+	}
+	#histogramPanel {
+		position: relative;
+		display: block;
+		background: white;
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+		height: 150px;
+		border: 1px solid #F1F1F1;
+	}
+	#pacsKeywords{
+		font-size:12px;
+
+	}
+</style>
+
+<body>
+	<div id="topPanel">
+
+		<label for="level">Levels:</label>
+		<input type="checkbox" id="levelCheckbox1" value="1" checked />
+		<label for="levelCheckbox1">1</label>
+		<input type="checkbox" id="levelCheckbox2" value="2" checked />
+		<label for="levelCheckbox2">2</label>
+		<input type="checkbox" id="levelCheckbox3" value="3" checked />
+		<label for="levelCheckbox3">3</label>
+		<input type="checkbox" id="levelCheckbox4" value="4" />
+		<label for="levelCheckbox4">4</label>
+		<br />
+		<label for="inputDataSelector">Table:</label>
+		<select id="inputDataSelector">
+		</select>
+		<input type="checkbox" id="visualizationSmooth" value="1" />
+		<label for="visualizationSmooth">smooth</label>
+		<br />
+		<label for="filterSelector">Filter:</label>
+		<select id="filterSelector">
+		</select>
+		<input type="checkbox" id="filterSmooth" value="1" />
+		<label for="filterSmooth">smooth</label>
+		<br />
+
+		<label class="generateInput" for="smoothingCoefficient">Smoothing coeff.:</label>
+		<input class="generateInput" id="smoothingCoefficient" type="text" value="1.0" size="5">
+		<label class="generateInput" for="smoothingWindowSize">window:</label>
+		<input class="generateInput" id="smoothingWindowSize" type="text" value="4" size="5">
+
+		<br />
+		<label class="generateInput" for="minimumCount">Minimum count:</label>
+		<input class="generateInput" id="minimumCount" type="text" value="500" size="5">
+		<br />
+		<label class="generateInput" for="percentile">Percentile:</label>
+		<input class="generateInput" id="percentile" type="text" value="90.00" size="5">
+		<label class="generateInput" for="percentile">%</label>
+		<input type="checkbox" id="endPercentile" value="1" checked />
+		<label for="endPercentile">from the end</label>
+		<br />
+		<label class="generateInput" for="borderMin">Border min:</label>
+		<input class="generateInput" id="borderMin" type="text" value="1" size="5">
+		<label class="generateInput" for="borderMax">max:</label>
+		<input class="generateInput" id="borderMax" type="text" value="0" size="5">
+		<br />
+
+		<input type="checkbox" id="normalizeColor" value="1" />
+		<label for="normalizeColor">Absolute intensity</label>
+		<input type="checkbox" id="absoluteChart" value="1" />
+		<label for="absoluteChart">Absolute chart</label>
+		<br />
+		<button id="generatePlot" onclick="generateNewVisualization();">Plot</button>
+		<!-- <input id="speedSlider" type="range" name="speedSlider" value="60" min="1" max="120" step="1"> -->
+		<hr>
+		<div id="plotPanel"></div>
+		<div id="histogramPanel"></div>
+
+		<p id="pacsLevel0"></p>
+		<p id="pacsLevel1"></p>
+		<p id="pacsLevel2"></p>
+		<p id="pacsLevel3"></p>
+		<p id="pacsKeywords"></p>
+	</div>
+	<script src="lib/d3.min.js"></script>
+	<script src="lib/math.min.js"></script>
+	<script src="lib/d3-contour.min.js"></script>
+	<script src="lib/d3-scale-chromatic.min.js"></script>
+	<script src="lib/taira.js"></script>
+	<script src="PACSHistory.js" defer></script>
+</body>
+
+</html>
