@@ -1,6 +1,6 @@
 "use strict";
 
-let dataFilename = "statisticsData.json";
+let dataFilename = "statisticsDataBase.json";
 let k_DefaultParameters = {
 	hierarchyBitSet :[true, true, true, true],
 	percentiles : [0.10, 0.5, 0.90],
